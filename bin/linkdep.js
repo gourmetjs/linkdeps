@@ -17,19 +17,19 @@ function _update(context, mode) {
   switch (mode) {
     case "deploy": 
       return context.addOwnDeps().then(function() {
-        return context.addLocalPublicDeps();
+        return context.addPublicLocals();
       }).then(function() {
-        return context.addLocalPrivateDeps();
+        return context.addPrivateLocals();
       });
     case "publish":
       return context.addOwnDeps().then(function() {
-        return context.errorLocalPrivateDeps();
+        return context.addPublicLocals();
       }).then(function() {
-        return context.addLocalDeps();
+        return context.errorLocalPrivateDeps();
       });
     default:  // "devel"
       return context.addOwnDeps().then(function() {
-        return context.addLocalPublicDeps();
+        return context.addPublicLocalDeps();
       }).then(function() {
         return context.linkLocals();
       });
