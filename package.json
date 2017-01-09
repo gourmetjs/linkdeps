@@ -1,0 +1,9 @@
+{
+  "name": "linkdep",
+  "version": "1.0.0",
+  "bin": "bin/linkdep.js",
+  "main": "lib/linkdep.js",
+  "dependencies": {
+    "minimist": "^1.2.0"
+  }
+}
