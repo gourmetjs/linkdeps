@@ -4,7 +4,7 @@
   "bin": "bin/linkdeps.js",
   "main": "lib/createLinkDepsContext.js",
   "scripts": {
-    "lint": "eslint bin lib",
+    "lint": "eslint bin lib test",
     "test": "tape test/*_test.js"
   },
   "dependencies": {

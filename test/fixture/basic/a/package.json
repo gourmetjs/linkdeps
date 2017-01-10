@@ -1,0 +1,15 @@
+{
+  "name": "local-a",
+  "version": "0.1.1",
+  "private": true,
+  "dependencies": {
+    "rimraf": "^2.5.4"
+  },
+  "linkdeps": {
+    "local": {
+      "dependencies": {
+        "../b": "*"
+      }
+    }
+  }
+}
