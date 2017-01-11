@@ -1,0 +1,7 @@
+{
+  "name": "local-c",
+  "version": "2.0.0",
+  "dependencies": {
+    "through": "^2.3.8"
+  }
+}

@@ -29,19 +29,22 @@ var PARSE_OPTS = {
       "  --version   print the version number",
       "  -h, --help  print this help message",
       "  --devel     devel mode update (default)",
-      "               1) Adds packages in 'linkdeps.own'",
-      "               2) Adds dependencies of packages in 'linkdeps.local' recursively",
-      "               3) Creates symlinks in 'node_modules' to packages in 'linkdeps.local'",
-      "  --publish   publish mode update",
-      "               1) Adds packages in 'linkdeps.own'",
-      "               2) Adds public packages in 'linkdeps.local' with name and '^version' ",
-      "                  from their package.json",
-      "                  * a private package causes an error",
+      "               1) Adds own regular dependencies (from 'linkdeps.own')",
+      "               2) Recursively adds regular dependencies of local packages",
+      "               3) Recursively creates symlink in 'node_modules' to local packages",
       "  --deploy    deploy mode update",
-      "               1) Adds packages in 'linkdeps.own'",
-      "               2) Adds public packages in 'linkdeps.local' with name and '^version' ",
+      "               1) Adds own regular dependencies",
+      "               2) Recursively adds local packages with 'file:' prefix",
+      "  --deploy-mix  deploy mode update mixed with public & private",
+      "               1) Adds own regular dependencies",
+      "               2) Adds public local packages with name and '^version' ",
       "                  from their package.json",
-      "               3) Adds private packages in 'linkdeps.local' with 'file:' prefix",
+      "               3) Recursively adds private local packages with 'file:' prefix",
+      "  --publish   publish mode update",
+      "               1) Adds own regular dependencies",
+      "               2) Adds public local packages with name and '^version' ",
+      "                  from their package.json",
+      "                  * a private local package causes an error",
       "  --check     check only, no output writing"
     ].join("\n"));
     return;
@@ -54,6 +57,8 @@ var PARSE_OPTS = {
 
   if (argv.deploy)
     mode = "deploy";
+  else if (argv["deploy-mix"])
+    mode = "deploy-mix";
   else if (argv.publish)
     mode = "publish";
   else
@@ -61,14 +66,19 @@ var PARSE_OPTS = {
 
   var linkctx = createLinkDepsContext({
     srcPath: srcPath,
-    desPath: desPath,
-    mode: mode,
-    check: argv.check
+    desPath: desPath
   });
 
-  linkctx.update().catch(function(err) {
-    setImmediate(function() {
-      throw err;
-    });
-  });
+  linkctx.update(mode, argv.check);
+
+  if (mode === "devel") {
+    console.log(linkctx.stringifyDiff());
+    if (!argv.check) {
+      linkctx.linkLocals().catch(function(err) {
+        setImmediate(function() {
+          throw err;
+        });
+      });
+    }
+  }
 })(parseArgs(process.argv.slice(2), PARSE_OPTS));
