@@ -1,0 +1,17 @@
+{
+  "name": "local-a",
+  "version": "0.1.1",
+  "dependencies": {
+    "npm-a-1": "^2.5.4"
+  },
+  "devDependencies": {
+    "npm-a-2": "^1.5.4"
+  },
+  "linkdeps": {
+    "local": {
+      "dependencies": {
+        "../b": "*"
+      }
+    }
+  }
+}

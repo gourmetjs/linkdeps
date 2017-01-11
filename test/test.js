@@ -79,8 +79,112 @@ test("basic - publish", function(t) {
     linkctx.update("publish", true);
     t.fail("should not get here");
   } catch (err) {
-    t.pass("exception thrown");
+    t.equal(err.message.split("\n")[0], "You cannot use private package: 'local-a'");
   }
+
+  t.end();
+});
+
+test("complex - devel", function(t) {
+  var linkctx = createLinkDepsContext({
+    srcPath: npath.join(__dirname, "fixture/complex")
+  });
+
+  var res = linkctx.update("devel", true);
+
+  t.deepEqual(res, {
+    dependencies: {
+      "npm-1": "^0.1.3",
+      "npm-2": "0.1.3",
+      "npm-b-2": "^1.2.1",
+      "npm-c-1": "^3.1.0"
+    },
+    devDependencies: {
+      "npm-a-1": "^2.5.4",
+      "npm-a-2": "^1.5.4",
+      "npm-b-1": "^1.0.1",
+      "npm-c-2": "^3.1.1"
+    }
+  });
+
+  t.equal(linkctx.stringifyDiff(), [
+    "<dependencies>",
+    "  npm-1: ^0.1.3 (~:^0.1.1, local-c@local/c:*, local-b@local/b:^0.1.3)",
+    "+ npm-2: 0.1.3 (~:^0.1.0, local-c@local/c:0.1.3)",
+    "+ npm-b-2: ^1.2.1 (local-c@local/c:^1.2.1, local-b@local/b:^1.1.1)",
+    "C npm-c-1: ^3.0.0 => ^3.1.0 (local-c@local/c:^3.0.1, local-b@local/b:^3.1.0)",
+    "<devDependencies>",
+    "+ npm-a-1: ^2.5.4 (local-a@local/a:^2.5.4)",
+    "+ npm-a-2: ^1.5.4 (local-a@local/a:^1.5.4)",
+    "  npm-b-1: ^1.0.1 (local-b@local/b:^1.0.1)",
+    "  npm-c-2: ^3.1.1 (local-c@local/c:^3.1.1)",
+    "- npm-d-1: ^4.5.4 ",
+    "- npm-d-2: ^5.5.4 "
+  ].join("\n"));
+
+  t.end();
+});
+
+test("complex - deploy", function(t) {
+  var linkctx = createLinkDepsContext({
+    srcPath: npath.join(__dirname, "fixture/complex")
+  });
+
+  var res = linkctx.update("deploy", true);
+
+  t.deepEqual(res, {
+    dependencies: {
+      "local-c": "file:local/c",
+      "npm-1": "^0.1.1"
+    },
+    devDependencies: {
+      "local-a": "file:local/a",
+      "local-b": "file:local/b",
+      "npm-2": "^0.1.0"
+    }
+  });
+
+  t.end();
+});
+
+test("complex - deploy-mix", function(t) {
+  var linkctx = createLinkDepsContext({
+    srcPath: npath.join(__dirname, "fixture/complex")
+  });
+
+  var res = linkctx.update("deploy-mix", true);
+
+  t.deepEqual(res, {
+    dependencies: {
+      "local-c": "^2.0.0",
+      "npm-1": "^0.1.1"
+    },
+    devDependencies: {
+      "local-a": "^0.1.1",
+      "npm-2": "^0.1.0"
+    }
+  });
+
+  t.end();
+});
+
+test("complex - publish", function(t) {
+  var linkctx = createLinkDepsContext({
+    srcPath: npath.join(__dirname, "fixture/complex")
+  });
+
+  var res = linkctx.update("publish", true);
+
+  t.deepEqual(res, {
+    dependencies: {
+      "local-c": "^2.0.0",
+      "npm-1": "^0.1.1"
+    },
+    devDependencies: {
+      "local-a": "^0.1.1",
+      "npm-2": "^0.1.0"
+    }
+  });
 
   t.end();
 });
