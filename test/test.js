@@ -1,5 +1,6 @@
 "use strict";
 
+var fs = require("fs");
 var npath = require("path");
 var nutil = require("util");
 var test = require("tape");
@@ -193,14 +194,25 @@ test("complex - publish", function(t) {
 });
 
 test("link", function(t) {
+  var binPath = npath.join(__dirname, "../bin/linkdeps.js");
   var srcPath = npath.join(__dirname, "fixture/link");
   var desPath = npath.join(__dirname, "_build");
-  var cmd = nutil.format("node %s %s %s",
-    npath.join(__dirname, "../bin/linkdeps.js"),
-    srcPath, desPath);
+  var rm = nutil.format("rimraf %s", desPath);
+  var cmd = nutil.format("node %s %s %s", binPath, srcPath, desPath);
+  var sh = shell.context({
+    echoCommand: false,
+    captureOutput: true
+  });
 
-  shell(cmd).then(function() {
-
+  sh(rm).then(function() {
+    return sh(cmd);
+  }).then(function() {
+    var moduleDir = npath.join(desPath, "node_modules");
+    t.ok(fs.existsSync(npath.join(moduleDir, "a")));
+    t.ok(fs.existsSync(npath.join(moduleDir, "b")));
+    t.ok(fs.existsSync(npath.join(moduleDir, ".bin/a")));
+    t.ok(fs.existsSync(npath.join(moduleDir, ".bin/b-bin")));
+    return sh(rm);
+  }).then(function() {
   }).then(t.end, t.end);
 });
-

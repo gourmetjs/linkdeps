@@ -1,0 +1,11 @@
+{
+  "name": "b",
+  "version": "0.1.2",
+  "private": true,
+  "bin": {
+    "b-bin": "b-bin.js"
+  },
+  "dependencies": {
+    "rimraf": "^2.5.4"
+  }
+}

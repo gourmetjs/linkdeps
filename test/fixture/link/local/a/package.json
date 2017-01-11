@@ -1,0 +1,16 @@
+{
+  "name": "a",
+  "version": "0.1.0",
+  "private": true,
+  "bin": "a-bin.js",
+  "dependencies": {
+    "mkdirp": "^0.5.1"
+  },
+  "linkdeps": {
+    "local": {
+      "dependencies": {
+        "../b": "*"
+      }
+    }
+  }
+}

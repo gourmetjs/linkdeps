@@ -3,7 +3,7 @@
   "linkdeps": {
     "local": {
       "dependencies": {
-        "./local": "*"
+        "./local/a": "*"
       }
     }
   }

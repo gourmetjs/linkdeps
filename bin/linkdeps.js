@@ -3,7 +3,7 @@
 "use strict";
 
 var parseArgs = require("minimist");
-var createLinkDepsContext = require("../lib");
+var createLinkDepsContext = require("..");
 
 var PARSE_OPTS = {
   boolean: true,
@@ -23,7 +23,7 @@ var PARSE_OPTS = {
 
   if (!srcPath || argv.help) {
     console.log([
-      "Usage: linkdeps <package.json> [<output_package.json>] [options]",
+      "Usage: linkdeps <input_dir> [<output_dir>] [options]",
       "",
       "Options:",
       "  --version   print the version number",
@@ -69,13 +69,14 @@ var PARSE_OPTS = {
     desPath: desPath
   });
 
-  linkctx.update(mode, argv.check);
+  linkctx.update(mode);
 
   if (!argv.check)
-    this.saveResult();
+    linkctx.saveResult();
 
   if (mode === "devel") {
     console.log(linkctx.stringifyDiff());
+    console.log(linkctx.stringifyLocals());
     if (!argv.check) {
       linkctx.linkLocals().catch(function(err) {
         setImmediate(function() {
