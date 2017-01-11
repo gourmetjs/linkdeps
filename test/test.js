@@ -1,7 +1,9 @@
 "use strict";
 
 var npath = require("path");
+var nutil = require("util");
 var test = require("tape");
+var shell = require("pshell");
 var createLinkDepsContext = require("..");
 
 test("basic - devel", function(t) {
@@ -189,3 +191,16 @@ test("complex - publish", function(t) {
 
   t.end();
 });
+
+test("link", function(t) {
+  var srcPath = npath.join(__dirname, "fixture/link");
+  var desPath = npath.join(__dirname, "_build");
+  var cmd = nutil.format("node %s %s %s",
+    npath.join(__dirname, "../bin/linkdeps.js"),
+    srcPath, desPath);
+
+  shell(cmd).then(function() {
+
+  }).then(t.end, t.end);
+});
+

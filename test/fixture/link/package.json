@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "linkdeps": {
+    "local": {
+      "dependencies": {
+        "./local": "*"
+      }
+    }
+  }
+}
