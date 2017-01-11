@@ -9,7 +9,7 @@ test("basic - devel", function(t) {
     srcPath: npath.join(__dirname, "fixture/basic")
   });
 
-  var res = linkctx.update("devel", true);
+  var res = linkctx.update("devel");
 
   t.deepEqual(res, {
     dependencies: {
@@ -37,7 +37,7 @@ test("basic - deploy", function(t) {
     srcPath: npath.join(__dirname, "fixture/basic")
   });
 
-  var res = linkctx.update("deploy", true);
+  var res = linkctx.update("deploy");
 
   t.deepEqual(res, {
     dependencies: {
@@ -56,7 +56,7 @@ test("basic - deploy-mix", function(t) {
     srcPath: npath.join(__dirname, "fixture/basic")
   });
 
-  var res = linkctx.update("deploy-mix", true);
+  var res = linkctx.update("deploy-mix");
 
   t.deepEqual(res, {
     dependencies: {
@@ -76,7 +76,7 @@ test("basic - publish", function(t) {
   });
 
   try {
-    linkctx.update("publish", true);
+    linkctx.update("publish");
     t.fail("should not get here");
   } catch (err) {
     t.equal(err.message.split("\n")[0], "You cannot use private package: 'local-a'");
@@ -90,7 +90,7 @@ test("complex - devel", function(t) {
     srcPath: npath.join(__dirname, "fixture/complex")
   });
 
-  var res = linkctx.update("devel", true);
+  var res = linkctx.update("devel");
 
   t.deepEqual(res, {
     dependencies: {
@@ -127,19 +127,20 @@ test("complex - devel", function(t) {
 
 test("complex - deploy", function(t) {
   var linkctx = createLinkDepsContext({
-    srcPath: npath.join(__dirname, "fixture/complex")
+    srcPath: npath.join(__dirname, "fixture/complex"),
+    desPath: npath.join(__dirname, "fixture/output"),
   });
 
-  var res = linkctx.update("deploy", true);
+  var res = linkctx.update("deploy");
 
   t.deepEqual(res, {
     dependencies: {
-      "local-c": "file:local/c",
+      "local-c": "file:../complex/local/c",
       "npm-1": "^0.1.1"
     },
     devDependencies: {
-      "local-a": "file:local/a",
-      "local-b": "file:local/b",
+      "local-a": "file:../complex/local/a",
+      "local-b": "file:../complex/local/b",
       "npm-2": "^0.1.0"
     }
   });
@@ -152,7 +153,7 @@ test("complex - deploy-mix", function(t) {
     srcPath: npath.join(__dirname, "fixture/complex")
   });
 
-  var res = linkctx.update("deploy-mix", true);
+  var res = linkctx.update("deploy-mix");
 
   t.deepEqual(res, {
     dependencies: {
@@ -173,7 +174,7 @@ test("complex - publish", function(t) {
     srcPath: npath.join(__dirname, "fixture/complex")
   });
 
-  var res = linkctx.update("publish", true);
+  var res = linkctx.update("publish");
 
   t.deepEqual(res, {
     dependencies: {

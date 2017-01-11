@@ -71,6 +71,9 @@ var PARSE_OPTS = {
 
   linkctx.update(mode, argv.check);
 
+  if (!argv.check)
+    this.saveResult();
+
   if (mode === "devel") {
     console.log(linkctx.stringifyDiff());
     if (!argv.check) {
