@@ -19,11 +19,11 @@ var PARSE_OPTS = {
   }
 
   var srcPath = argv._[0];
-  var desPath = argv._[1];
+  var desPath = argv.out;
 
-  if (!srcPath || argv.help) {
+  if (argv.help) {
     console.log([
-      "Usage: linkdeps <input_dir> [<output_dir>] [options]",
+      "Usage: linkdeps [<input_dir>] [options]",
       "",
       "Options:",
       "  --version   print the version number",
@@ -35,7 +35,7 @@ var PARSE_OPTS = {
       "  --deploy    deploy mode update",
       "               1) Adds own regular dependencies",
       "               2) Recursively adds local packages with 'file:' prefix",
-      "  --deploy-mix  deploy mode update mixed with public & private",
+      "  --deploy-mix  deploy mode update with public & private mixed",
       "               1) Adds own regular dependencies",
       "               2) Adds public local packages with name and '^version' ",
       "                  from their package.json",
@@ -45,14 +45,12 @@ var PARSE_OPTS = {
       "               2) Adds public local packages with name and '^version' ",
       "                  from their package.json",
       "                  * a private local package causes an error",
-      "  --check     check only, no output writing"
+      "  --link      do #3 of devel mode only",
+      "  --check     check only, no output writing",
+      "  --out=dir   set output dir"
     ].join("\n"));
     return;
   }
-
-  if (!desPath)
-    desPath = srcPath;
-
   var mode;
 
   if (argv.deploy)
@@ -61,6 +59,8 @@ var PARSE_OPTS = {
     mode = "deploy-mix";
   else if (argv.publish)
     mode = "publish";
+  else if (argv.link)
+    mode = "link";
   else
     mode = "devel";
 
@@ -69,20 +69,23 @@ var PARSE_OPTS = {
     desPath: desPath
   });
 
-  linkctx.update(mode);
+  if (mode !== "link") {
+    linkctx.update(mode);
 
-  if (!argv.check)
-    linkctx.saveResult();
+    if (!argv.check)
+      linkctx.saveResult();
+  }
 
   if (mode === "devel") {
     console.log(linkctx.stringifyDiff());
     console.log(linkctx.stringifyLocals());
-    if (!argv.check) {
-      linkctx.linkLocals().catch(function(err) {
-        setImmediate(function() {
-          throw err;
-        });
+  }
+
+  if ((mode === "devel" || mode === "link") && !argv.check) {
+    linkctx.linkLocals().catch(function(err) {
+      setImmediate(function() {
+        throw err;
       });
-    }
+    });
   }
 })(parseArgs(process.argv.slice(2), PARSE_OPTS));

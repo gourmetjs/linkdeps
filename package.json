@@ -1,6 +1,6 @@
 {
   "name": "linkdeps",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Manages symlink for local dependencies",
   "license": "MIT",
   "repository": "https://github.com/gourmetjs/linkdeps",
@@ -12,6 +12,7 @@
     "debug": "node --inspect --debug-brk node_modules/tape/bin/tape test/test.js"
   },
   "dependencies": {
+    "lodash.clone": "^4.5.0",
     "lodash.template": "^4.4.0",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
