@@ -272,6 +272,10 @@ escope@^3.6.0:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
 
+eslint-config-gourmet@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-gourmet/-/eslint-config-gourmet-1.0.0.tgz#7ed5b953f86cb7b0a04eeb0e7bd496c2c7bfc084"
+
 eslint@^3.13.1:
   version "3.13.1"
   resolved "https://registry.yarnpkg.com/eslint/-/eslint-3.13.1.tgz#564d2646b5efded85df96985332edd91a23bff25"

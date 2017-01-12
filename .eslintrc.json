@@ -1,17 +1,4 @@
 {
-  "env": {
-    "node": true
-  },
-  "globals": {
-    "Promise": true
-  },
-  "rules": {
-    "indent": ["error", 2, {"SwitchCase": 1}],
-    "no-unused-vars": ["error", {"vars": "all", "args": "after-used"}],
-    "no-undef": ["error"],
-    "quotes": ["error", "double", {"avoidEscape": true}],
-    "semi": ["error", "always"],
-    "strict": ["error", "global"],
-    "no-redeclare": ["error", {"builtinGlobals": true}]
-  }
+  "extends": "gourmet/node",
+  "root": true
 }
