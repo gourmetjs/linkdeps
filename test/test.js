@@ -198,7 +198,7 @@ test("link", function(t) {
   var srcPath = npath.join(__dirname, "fixture/link");
   var desPath = npath.join(__dirname, "_build");
   var rm = nutil.format("rimraf %s", desPath);
-  var cmd = nutil.format("node %s %s %s", binPath, srcPath, desPath);
+  var cmd = nutil.format("node %s %s --out=%s", binPath, srcPath, desPath);
   var sh = shell.context({
     echoCommand: false,
     captureOutput: true
