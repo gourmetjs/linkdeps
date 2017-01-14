@@ -2,24 +2,16 @@
 
 "use strict";
 
-var parseArgs = require("minimist");
 var createLinkDepsContext = require("..");
 
-var PARSE_OPTS = {
-  boolean: true,
-  alias: {
-    "h": "help"
-  }
-};
+(function main() {
+  var linkctx = createLinkDepsContext();
+  var argv = linkctx.argv;
 
-(function main(argv) {
   if (argv.version) {
     console.log(require("../package.json").version);
     return;
   }
-
-  var srcPath = argv._[0];
-  var desPath = argv.out;
 
   if (argv.help) {
     console.log([
@@ -51,41 +43,10 @@ var PARSE_OPTS = {
     ].join("\n"));
     return;
   }
-  var mode;
 
-  if (argv.deploy)
-    mode = "deploy";
-  else if (argv["deploy-mix"])
-    mode = "deploy-mix";
-  else if (argv.publish)
-    mode = "publish";
-  else if (argv.link)
-    mode = "link";
-  else
-    mode = "devel";
-
-  var linkctx = createLinkDepsContext({
-    srcPath: srcPath,
-    desPath: desPath
-  });
-
-  if (mode !== "link") {
-    linkctx.update(mode);
-
-    if (!argv.check)
-      linkctx.saveResult();
-  }
-
-  if (mode === "devel") {
-    console.log(linkctx.stringifyDiff());
-    console.log(linkctx.stringifyLocals());
-  }
-
-  if ((mode === "devel" || mode === "link") && !argv.check) {
-    linkctx.linkLocals().catch(function(err) {
-      setImmediate(function() {
-        throw err;
-      });
+  linkctx.run().catch(function(err) {
+    setImmediate(function() {
+      throw err;
     });
-  }
-})(parseArgs(process.argv.slice(2), PARSE_OPTS));
+  });
+})();
