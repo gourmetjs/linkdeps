@@ -212,7 +212,7 @@ test("link", function(t) {
     t.ok(fs.existsSync(npath.join(moduleDir, "b")));
     t.ok(fs.existsSync(npath.join(moduleDir, ".bin/a")));
     t.ok(fs.existsSync(npath.join(moduleDir, ".bin/b-bin")));
-    return sh(rm);
+    //return sh(rm);
   }).then(function() {
   }).then(t.end, t.end);
 });
