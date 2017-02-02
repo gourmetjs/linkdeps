@@ -25,10 +25,10 @@ test("basic - devel", function(t) {
 
   t.equal(linkctx.stringifyDiff(), [
     "<dependencies>",
-    "+ deep-equal: ^1.0.1 (local-b@b:^1.0.1)",
+    "+ deep-equal: ^1.0.1 (b:^1.0.1)",
     "+ mkdirp: ^0.5.1 (~:^0.5.1)",
-    "+ rimraf: ^2.5.4 (local-a@a:^2.5.4)",
-    "+ through: ^2.3.8 (local-c@c:^2.3.8)",
+    "+ rimraf: ^2.5.4 (a:^2.5.4)",
+    "+ through: ^2.3.8 (c:^2.3.8)",
     "- will_be_deleted: * "
   ].join("\n"));
 
@@ -112,15 +112,15 @@ test("complex - devel", function(t) {
 
   t.equal(linkctx.stringifyDiff(), [
     "<dependencies>",
-    "  npm-1: ^0.1.3 (~:^0.1.1, local-c@local/c:*, local-b@local/b:^0.1.3)",
-    "+ npm-2: 0.1.3 (~:^0.1.0, local-c@local/c:0.1.3)",
-    "+ npm-b-2: ^1.2.1 (local-c@local/c:^1.2.1, local-b@local/b:^1.1.1)",
-    "C npm-c-1: ^3.0.0 => ^3.1.0 (local-c@local/c:^3.0.1, local-b@local/b:^3.1.0)",
+    "  npm-1: ^0.1.3 (~:^0.1.1, local/c:*, local/b:^0.1.3)",
+    "+ npm-2: 0.1.3 (~:^0.1.0, local/c:0.1.3)",
+    "+ npm-b-2: ^1.2.1 (local/c:^1.2.1, local/b:^1.1.1)",
+    "C npm-c-1: ^3.0.0 => ^3.1.0 (local/c:^3.0.1, local/b:^3.1.0)",
     "<devDependencies>",
-    "+ npm-a-1: ^2.5.4 (local-a@local/a:^2.5.4)",
-    "+ npm-a-2: ^1.5.4 (local-a@local/a:^1.5.4)",
-    "  npm-b-1: ^1.0.1 (local-b@local/b:^1.0.1)",
-    "  npm-c-2: ^3.1.1 (local-c@local/c:^3.1.1)",
+    "+ npm-a-1: ^2.5.4 (local/a:^2.5.4)",
+    "+ npm-a-2: ^1.5.4 (local/a:^1.5.4)",
+    "  npm-b-1: ^1.0.1 (local/b:^1.0.1)",
+    "  npm-c-2: ^3.1.1 (local/c:^3.1.1)",
     "- npm-d-1: ^4.5.4 ",
     "- npm-d-2: ^5.5.4 "
   ].join("\n"));
