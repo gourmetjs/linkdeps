@@ -5,14 +5,14 @@ var npath = require("path");
 var nutil = require("util");
 var test = require("tape");
 var shell = require("pshell");
-var createLinkDepsContext = require("..");
+var LinkDeps = require("../lib/LinkDeps");
 
 test("basic - devel", function(t) {
-  var linkctx = createLinkDepsContext({
+  var linkdeps = new LinkDeps({
     srcPath: npath.join(__dirname, "fixture/basic")
   });
 
-  var res = linkctx.update("devel");
+  var res = linkdeps.update("devel");
 
   t.deepEqual(res, {
     dependencies: {
@@ -23,24 +23,24 @@ test("basic - devel", function(t) {
     }
   });
 
-  t.equal(linkctx.stringifyDiff(), [
+  t.equal(linkdeps.stringifyDiff(), [
     "<dependencies>",
-    "+ deep-equal: ^1.0.1 (b:^1.0.1)",
-    "+ mkdirp: ^0.5.1 (~:^0.5.1)",
-    "+ rimraf: ^2.5.4 (a:^2.5.4)",
-    "+ through: ^2.3.8 (c:^2.3.8)",
-    "- will_be_deleted: * "
+    "+ deep-equal: ^1.0.1",
+    "+ mkdirp: ^0.5.1",
+    "+ rimraf: ^2.5.4",
+    "+ through: ^2.3.8",
+    "- will_be_deleted: *"
   ].join("\n"));
 
   t.end();
 });
 
 test("basic - deploy", function(t) {
-  var linkctx = createLinkDepsContext({
+  var linkdeps = new LinkDeps({
     srcPath: npath.join(__dirname, "fixture/basic")
   });
 
-  var res = linkctx.update("deploy");
+  var res = linkdeps.update("deploy");
 
   t.deepEqual(res, {
     dependencies: {
@@ -55,11 +55,11 @@ test("basic - deploy", function(t) {
 });
 
 test("basic - deploy-mix", function(t) {
-  var linkctx = createLinkDepsContext({
+  var linkdeps = new LinkDeps({
     srcPath: npath.join(__dirname, "fixture/basic")
   });
 
-  var res = linkctx.update("deploy-mix");
+  var res = linkdeps.update("deploy-mix");
 
   t.deepEqual(res, {
     dependencies: {
@@ -74,12 +74,12 @@ test("basic - deploy-mix", function(t) {
 });
 
 test("basic - publish", function(t) {
-  var linkctx = createLinkDepsContext({
+  var linkdeps = new LinkDeps({
     srcPath: npath.join(__dirname, "fixture/basic")
   });
 
   try {
-    linkctx.update("publish");
+    linkdeps.update("publish");
     t.fail("should not get here");
   } catch (err) {
     t.equal(err.message.split("\n")[0], "You cannot use private package: 'local-a'");
@@ -89,11 +89,12 @@ test("basic - publish", function(t) {
 });
 
 test("complex - devel", function(t) {
-  var linkctx = createLinkDepsContext({
-    srcPath: npath.join(__dirname, "fixture/complex")
+  var linkdeps = new LinkDeps({
+    srcPath: npath.join(__dirname, "fixture/complex"),
+    refs: true
   });
 
-  var res = linkctx.update("devel");
+  var res = linkdeps.update("devel");
 
   t.deepEqual(res, {
     dependencies: {
@@ -110,7 +111,7 @@ test("complex - devel", function(t) {
     }
   });
 
-  t.equal(linkctx.stringifyDiff(), [
+  t.equal(linkdeps.stringifyDiff(), [
     "<dependencies>",
     "  npm-1: ^0.1.3 (~:^0.1.1, local/c:*, local/b:^0.1.3)",
     "+ npm-2: 0.1.3 (~:^0.1.0, local/c:0.1.3)",
@@ -121,20 +122,20 @@ test("complex - devel", function(t) {
     "+ npm-a-2: ^1.5.4 (local/a:^1.5.4)",
     "  npm-b-1: ^1.0.1 (local/b:^1.0.1)",
     "  npm-c-2: ^3.1.1 (local/c:^3.1.1)",
-    "- npm-d-1: ^4.5.4 ",
-    "- npm-d-2: ^5.5.4 "
+    "- npm-d-1: ^4.5.4",
+    "- npm-d-2: ^5.5.4"
   ].join("\n"));
 
   t.end();
 });
 
 test("complex - deploy", function(t) {
-  var linkctx = createLinkDepsContext({
+  var linkdeps = new LinkDeps({
     srcPath: npath.join(__dirname, "fixture/complex"),
     desPath: npath.join(__dirname, "fixture/output"),
   });
 
-  var res = linkctx.update("deploy");
+  var res = linkdeps.update("deploy");
 
   t.deepEqual(res, {
     dependencies: {
@@ -152,11 +153,11 @@ test("complex - deploy", function(t) {
 });
 
 test("complex - deploy-mix", function(t) {
-  var linkctx = createLinkDepsContext({
+  var linkdeps = new LinkDeps({
     srcPath: npath.join(__dirname, "fixture/complex")
   });
 
-  var res = linkctx.update("deploy-mix");
+  var res = linkdeps.update("deploy-mix");
 
   t.deepEqual(res, {
     dependencies: {
@@ -173,11 +174,11 @@ test("complex - deploy-mix", function(t) {
 });
 
 test("complex - publish", function(t) {
-  var linkctx = createLinkDepsContext({
+  var linkdeps = new LinkDeps({
     srcPath: npath.join(__dirname, "fixture/complex")
   });
 
-  var res = linkctx.update("publish");
+  var res = linkdeps.update("publish");
 
   t.deepEqual(res, {
     dependencies: {
