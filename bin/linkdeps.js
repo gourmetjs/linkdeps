@@ -3,7 +3,7 @@
 "use strict";
 
 var program = require("commander");
-var runLinkDeps = require("..");
+var runAsMain = require("..").runAsMain;
 var pkg = require("../package.json");
 
 program
@@ -60,7 +60,4 @@ var options = {
   refs: program.refs
 };
 
-runLinkDeps(options).catch(function(err) {
-  console.error(err);
-  process.exit(1);
-});
+runAsMain(options);
